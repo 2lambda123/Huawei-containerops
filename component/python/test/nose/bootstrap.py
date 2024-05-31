@@ -49,6 +49,19 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the specified path using the given Python version.
+
+    This function sets up the specified path by installing dependencies
+    using the provided Python version.
+
+    Args:
+        path (str): The path to the directory where setup needs to be performed.
+        version (str?): The Python version to be used for setup. Defaults to 'py3k'.
+
+    Returns:
+        bool: True if setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -72,6 +85,16 @@ def pip_install(file_name, version='py3k'):
 
 
 def nose(file_name):
+    """    Run nosetests for a specific file and return True if successful, False
+    otherwise.
+
+    Args:
+        file_name (str): The name of the file to run nosetests on.
+
+    Returns:
+        bool: True if nosetests run successfully, False otherwise.
+    """
+
     r = subprocess.run('cd {}/{}; nosetests --with-xunit --xunit-file=/tmp/output.xml'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:
