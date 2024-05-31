@@ -50,6 +50,20 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the specified Python package.
+
+    This function sets up the specified Python package by running the
+    installation command in the provided path using the specified Python
+    version.
+
+    Args:
+        path (str): The path to the Python package.
+        version (str): The Python version to use for installation (default is 'py3k').
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -73,6 +87,18 @@ def pip_install(file_name, version='py3k'):
 
 
 def mamba(file_name):
+    """    Run mamba command on a specified file with coverage enabled.
+
+    This function runs the mamba command on the specified file with coverage
+    enabled using the subprocess module.
+
+    Args:
+        file_name (str): The name of the file to be used with mamba.
+
+    Returns:
+        bool: True if the mamba command runs successfully, False otherwise.
+    """
+
     r = subprocess.run('cd {}; mamba {} --enable-coverage'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:
