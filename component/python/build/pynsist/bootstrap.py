@@ -21,6 +21,18 @@ def git_clone(url):
 
 
 def setup(path):
+    """    Setup the given Python package from the specified path.
+
+    This function sets up a Python package by running the 'install' command
+    using the 'python3' executable in the specified directory.
+
+    Args:
+        path (str): The path to the Python package.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; python3 {} install'.format(dir_name, file_name),
@@ -63,6 +75,20 @@ def pynsist(file_name):
 
 
 def compress(file_name):
+    """    Compresses the specified file using tar and bzip2.
+
+    This function compresses the specified file using the tar and bzip2
+    utilities. It first retrieves the directory name of the input file, then
+    runs the tar and bzip2 command to compress the contents of the specified
+    directory into a file named 'output.tar.bz2' in the '/tmp' directory.
+
+    Args:
+        file_name (str): The path of the file to be compressed.
+
+    Returns:
+        bool: True if the compression is successful, False otherwise.
+    """
+
     dirname = os.path.dirname(file_name)
     r = subprocess.run('cd {}/{}/build/nsis; tar cjvf /tmp/output.tar.bz2 .'.format(REPO_PATH, dirname), shell=False)
 
