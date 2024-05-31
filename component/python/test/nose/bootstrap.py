@@ -52,7 +52,7 @@ def setup(path, version='py3k'):
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
-                       shell=True)
+                       shell=False)
 
     if r.returncode != 0:
         print("[COUT] install dependences failed", file=sys.stderr)
@@ -72,7 +72,7 @@ def pip_install(file_name, version='py3k'):
 
 
 def nose(file_name):
-    r = subprocess.run('cd {}/{}; nosetests --with-xunit --xunit-file=/tmp/output.xml'.format(REPO_PATH, file_name), shell=True)
+    r = subprocess.run('cd {}/{}; nosetests --with-xunit --xunit-file=/tmp/output.xml'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:
         return False

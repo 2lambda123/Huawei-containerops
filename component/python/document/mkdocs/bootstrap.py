@@ -22,7 +22,7 @@ def git_clone(url):
 
 
 def mkdocs(dir_name):
-    r = subprocess.run('cd {}/{}; mkdocs json'.format(REPO_PATH, dir_name), shell=True)
+    r = subprocess.run('cd {}/{}; mkdocs json'.format(REPO_PATH, dir_name), shell=False)
 
     if r.returncode != 0:
         print("[COUT] mkdocs error", file=sys.stderr)

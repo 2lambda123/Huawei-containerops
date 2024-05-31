@@ -24,7 +24,7 @@ def setup(path):
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; python3 {} install'.format(dir_name, file_name),
-                       shell=True)
+                       shell=False)
 
     if r.returncode != 0:
         print("[COUT] install dependences failed: {}".format(path), file=sys.stderr)
@@ -64,7 +64,7 @@ def pynsist(file_name):
 
 def compress(file_name):
     dirname = os.path.dirname(file_name)
-    r = subprocess.run('cd {}/{}/build/nsis; tar cjvf /tmp/output.tar.bz2 .'.format(REPO_PATH, dirname), shell=True)
+    r = subprocess.run('cd {}/{}/build/nsis; tar cjvf /tmp/output.tar.bz2 .'.format(REPO_PATH, dirname), shell=False)
 
     if r.returncode != 0:
         print("[COUT] compress error", file=sys.stderr)
