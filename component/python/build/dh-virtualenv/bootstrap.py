@@ -31,6 +31,15 @@ def upload_file(upload):
 
 
 def build():
+    """    Build the package using mk-build-deps and dpkg-buildpackage.
+
+    This function runs mk-build-deps and dpkg-buildpackage commands to build
+    the package from the specified repository path.
+
+    Returns:
+        bool: True if the build is successful, False otherwise.
+    """
+
     r = subprocess.run('cd {}; yes | mk-build-deps -ri; dpkg-buildpackage -us -uc -b'.format(REPO_PATH), shell=False)
 
     if r.returncode != 0:

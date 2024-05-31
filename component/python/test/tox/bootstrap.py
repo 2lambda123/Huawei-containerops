@@ -22,6 +22,18 @@ def git_clone(url):
 
 
 def setup(path):
+    """    Set up the specified Python package.
+
+    This function sets up the specified Python package by running the
+    'install' command using Python 3 within the specified directory.
+
+    Args:
+        path (str): The path to the Python package.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; python3 {} install'.format(dir_name, file_name),
@@ -45,6 +57,18 @@ def pip_install(file_name):
 
 
 def tox(file_name):
+    """    Run tox for the specified file.
+
+    This function runs tox for the specified file and returns True if the
+    process is successful, otherwise returns False.
+
+    Args:
+        file_name (str): The name of the file to run tox for.
+
+    Returns:
+        bool: True if the process is successful, False otherwise.
+    """
+
     r = subprocess.run('cd {}/{}; tox --result-json /tmp/output.json'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:

@@ -51,6 +51,20 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Setup the given Python package at the specified path using the provided
+    Python version.
+
+    This function sets up the Python package located at the given path by
+    running the installation command for the specified Python version.
+
+    Args:
+        path (str): The path to the Python package.
+        version (str): The Python version to use for installation (default is 'py3k').
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -74,6 +88,18 @@ def pip_install(file_name, version='py3k'):
 
 
 def pdoc(mod):
+    """    Generate documentation in HTML format using pdoc.
+
+    This function generates HTML documentation for the specified module and
+    its submodules using pdoc.
+
+    Args:
+        mod (str): The name of the module for which documentation will be generated.
+
+    Returns:
+        bool: True if the documentation generation is successful, False otherwise.
+    """
+
     r = subprocess.run('pdoc --html-dir /tmp/output --html {} --all-submodules'.format(mod), shell=False)
 
     if r.returncode != 0:

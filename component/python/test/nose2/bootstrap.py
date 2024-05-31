@@ -49,6 +49,17 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the environment by installing dependencies using the specified
+    Python version.
+
+    Args:
+        path (str): The path to the file.
+        version (str?): The Python version to use (default is 'py3k').
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -72,6 +83,18 @@ def pip_install(file_name, version='py3k'):
 
 
 def nose2(file_name):
+    """    Run nose2 test suite for the specified file.
+
+    This function runs the nose2 test suite for the specified file using the
+    junitxml plugin and a custom configuration file.
+
+    Args:
+        file_name (str): The name of the file to run the test suite for.
+
+    Returns:
+        bool: True if the test suite ran successfully, False otherwise.
+    """
+
     r = subprocess.run('cd {}/{}; nose2 --plugin nose2.plugins.junitxml --config /root/nose2.cfg'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:

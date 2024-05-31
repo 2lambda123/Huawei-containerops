@@ -50,6 +50,20 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the environment by installing dependencies using the specified
+    Python version.
+
+    This function sets up the environment by installing dependencies using
+    the specified Python version.
+
+    Args:
+        path (str): The path to the file.
+        version (str?): The Python version to use (default is 'py3k').
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -82,6 +96,18 @@ def get_dir_name(dir_name):
 
 
 def green(dir_name):
+    """    Run the 'green' test suite in the specified directory.
+
+    This function runs the 'green' test suite in the specified directory and
+    returns True if the tests pass, otherwise returns False.
+
+    Args:
+        dir_name (str): The name of the directory where the 'green' test suite will be run.
+
+    Returns:
+        bool: True if the tests pass, False otherwise.
+    """
+
     r = subprocess.run('cd {}; green -r'.format(get_dir_name(dir_name)), shell=False)
 
     if r.returncode != 0:

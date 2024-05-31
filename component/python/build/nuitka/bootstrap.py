@@ -48,6 +48,19 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the specified package using the given Python version.
+
+    This function sets up the specified package by running the installation
+    command in the provided path using the specified Python version.
+
+    Args:
+        path (str): The path to the package.
+        version (str?): The Python version to use for installation. Defaults to 'py3k'.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),

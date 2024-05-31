@@ -50,6 +50,19 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the specified Python package.
+
+    This function sets up the specified Python package by running the
+    installation command in the given directory.
+
+    Args:
+        path (str): The path to the Python package.
+        version (str?): The Python version to use for installation. Defaults to 'py3k'.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -73,6 +86,19 @@ def pip_install(file_name, version='py3k'):
 
 
 def pybuilder(dir_name, task):
+    """    Run pybuilder task in a specified directory.
+
+    This function runs a pybuilder task in the specified directory. If no
+    directory is provided, it runs the task in the repository path.
+
+    Args:
+        dir_name (str): The name of the directory where the task will be run.
+        task (str): The pybuilder task to be executed.
+
+    Returns:
+        bool: True if the task was executed successfully, False otherwise.
+    """
+
     if dir_name and dir_name != '.':
         dir_name = '{}/{}'.format(REPO_PATH, dir_name)
     else:

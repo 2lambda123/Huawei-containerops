@@ -22,6 +22,18 @@ def git_clone(url):
 
 
 def mkdocs(dir_name):
+    """    Generate mkdocs json for the specified directory.
+
+    This function runs the 'mkdocs json' command for the specified
+    directory.
+
+    Args:
+        dir_name (str): The name of the directory for which mkdocs json will be generated.
+
+    Returns:
+        bool: True if mkdocs json generation is successful, False otherwise.
+    """
+
     r = subprocess.run('cd {}/{}; mkdocs json'.format(REPO_PATH, dir_name), shell=False)
 
     if r.returncode != 0:

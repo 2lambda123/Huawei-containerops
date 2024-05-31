@@ -49,6 +49,20 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Set up the specified Python package.
+
+    This function sets up the specified Python package by running the
+    installation command in the given path using the specified Python
+    version.
+
+    Args:
+        path (str): The path to the package to be set up.
+        version (str?): The Python version to use for setup. Defaults to 'py3k'.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -72,6 +86,16 @@ def pip_install(file_name, version='py3k'):
 
 
 def pytest(file_name):
+    """    Run pytest for a specific file and return True if successful, False
+    otherwise.
+
+    Args:
+        file_name (str): The name of the file to be tested.
+
+    Returns:
+        bool: True if the pytest run is successful, False otherwise.
+    """
+
     r = subprocess.run('cd {}/{}; pytest --junit-xml=/tmp/output.xml'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:
