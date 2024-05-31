@@ -50,6 +50,19 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """    Setup the given path with the specified Python version.
+
+    This function sets up the specified path with the given Python version
+    by running the installation command.
+
+    Args:
+        path (str): The path where the setup needs to be performed.
+        version (str?): The Python version to be used for setup. Defaults to 'py3k'.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -73,6 +86,20 @@ def pip_install(file_name, version='py3k'):
 
 
 def sphinx(dir_name):
+    """    Generate sphinx documentation for the specified directory.
+
+    This function runs the 'make json' command in the specified directory to
+    generate sphinx documentation in JSON format.
+
+    Args:
+        dir_name (str): The name of the directory where the sphinx documentation will be
+            generated.
+
+    Returns:
+        bool: True if the sphinx documentation generation is successful, False
+            otherwise.
+    """
+
     r = subprocess.run('cd {}/{}; make json'.format(REPO_PATH, dir_name), shell=False)
 
     if r.returncode != 0:
