@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import yaml
+from security import safe_command
 
 REPO_PATH = 'git-repo'
 
@@ -28,7 +29,7 @@ def get_pip_cmd(version):
 
 
 def init_env(version):
-    subprocess.run([get_pip_cmd(version), 'install', 'pylama'])
+    safe_command.run(subprocess.run, [get_pip_cmd(version), 'install', 'pylama'])
 
 
 def validate_version(version):

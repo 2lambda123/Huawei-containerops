@@ -9,6 +9,7 @@ import line_profiler as profiler
 import linecache
 import inspect
 import yaml
+from security import safe_command
 
 REPO_PATH = 'git-repo'
 
@@ -39,7 +40,7 @@ def get_python_cmd(version):
 
 
 def init_env(version):
-    subprocess.run([get_pip_cmd(version), 'install', 'cython', 'line_profiler'])
+    safe_command.run(subprocess.run, [get_pip_cmd(version), 'install', 'cython', 'line_profiler'])
 
 
 def validate_version(version):
@@ -54,7 +55,7 @@ def validate_version(version):
 def setup(path, version='py3k'):
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
-    r = subprocess.run('cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
+    r = safe_command.run(subprocess.run, 'cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
                        shell=False)
 
     if r.returncode != 0:
@@ -65,7 +66,7 @@ def setup(path, version='py3k'):
 
 
 def pip_install(file_name, version='py3k'):
-    r = subprocess.run([get_pip_cmd(version), 'install', '-r', file_name])
+    r = safe_command.run(subprocess.run, [get_pip_cmd(version), 'install', '-r', file_name])
 
     if r.returncode != 0:
         print("[COUT] install dependences failed", file=sys.stderr)

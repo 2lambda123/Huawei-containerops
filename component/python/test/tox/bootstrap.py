@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import anymarkup
+from security import safe_command
 
 REPO_PATH = 'git-repo'
 
@@ -24,7 +25,7 @@ def git_clone(url):
 def setup(path):
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
-    r = subprocess.run('cd {}; python3 {} install'.format(dir_name, file_name),
+    r = safe_command.run(subprocess.run, 'cd {}; python3 {} install'.format(dir_name, file_name),
                        shell=False)
 
     if r.returncode != 0:
@@ -45,7 +46,7 @@ def pip_install(file_name):
 
 
 def tox(file_name):
-    r = subprocess.run('cd {}/{}; tox --result-json /tmp/output.json'.format(REPO_PATH, file_name), shell=False)
+    r = safe_command.run(subprocess.run, 'cd {}/{}; tox --result-json /tmp/output.json'.format(REPO_PATH, file_name), shell=False)
 
     if r.returncode != 0:
         return False
