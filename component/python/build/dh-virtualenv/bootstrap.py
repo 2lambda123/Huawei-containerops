@@ -4,6 +4,7 @@ import subprocess
 import os
 import sys
 import glob
+from security import safe_command
 
 REPO_PATH = 'git-repo'
 
@@ -31,7 +32,7 @@ def upload_file(upload):
 
 
 def build():
-    r = subprocess.run('cd {}; yes | mk-build-deps -ri; dpkg-buildpackage -us -uc -b'.format(REPO_PATH), shell=False)
+    r = safe_command.run(subprocess.run, 'cd {}; yes | mk-build-deps -ri; dpkg-buildpackage -us -uc -b'.format(REPO_PATH), shell=False)
 
     if r.returncode != 0:
         print("[COUT] build error", file=sys.stderr)
