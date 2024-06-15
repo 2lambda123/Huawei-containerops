@@ -10,6 +10,18 @@ REPO_PATH = 'git-repo'
 
 
 def git_clone(url):
+    """Clone a git repository from the provided URL.
+
+    This function clones a git repository from the given URL to the
+    predefined REPO_PATH.
+
+    Args:
+        url (str): The URL of the git repository to clone.
+
+    Returns:
+        bool: True if the cloning was successful, False otherwise.
+    """
+
     r = subprocess.run(['git', 'clone', url, REPO_PATH])
 
     if r.returncode == 0:
@@ -22,6 +34,16 @@ def git_clone(url):
 
 
 def setup(path):
+    """Set up the environment by installing dependencies from the specified
+    path.
+
+    Args:
+        path (str): The path to the file containing the dependencies.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = safe_command.run(subprocess.run, 'cd {}; python3 {} install'.format(dir_name, file_name),
@@ -35,6 +57,18 @@ def setup(path):
 
 
 def pip_install(file_name):
+    """Install Python packages listed in a requirements file using pip3.
+
+    This function runs 'pip3 install -r <file_name>' command to install
+    packages specified in the requirements file.
+
+    Args:
+        file_name (str): The path to the requirements file.
+
+    Returns:
+        bool: True if the installation is successful, False otherwise.
+    """
+
     r = subprocess.run(['pip3', 'install', '-r', file_name])
 
     if r.returncode != 0:
@@ -45,6 +79,18 @@ def pip_install(file_name):
 
 
 def upload_file(upload):
+    """Uploads a file using curl command.
+
+    This function uploads a file to a specified location using the curl
+    command.
+
+    Args:
+        upload (str): The URL where the file will be uploaded.
+
+    Returns:
+        bool: True if the file was uploaded successfully, False otherwise.
+    """
+
     r1 = subprocess.run(['curl', '-XPUT', '-d', '@/tmp/output.tar.bz2', upload])
     print()
     if r1.returncode != 0:
@@ -54,6 +100,16 @@ def upload_file(upload):
 
 
 def pynsist(file_name):
+    """Run pynsist to create an installer using the specified configuration
+    file.
+
+    Args:
+        file_name (str): The name of the configuration file.
+
+    Returns:
+        bool: True if the pynsist command ran successfully, False otherwise.
+    """
+
     r = subprocess.run(['pynsist', '{}/{}'.format(REPO_PATH, file_name)])
 
     if r.returncode != 0:
@@ -64,6 +120,18 @@ def pynsist(file_name):
 
 
 def compress(file_name):
+    """Compress a directory into a tar.bz2 file.
+
+    This function compresses the contents of a specified directory into a
+    tar.bz2 file.
+
+    Args:
+        file_name (str): The path to the directory to be compressed.
+
+    Returns:
+        bool: True if the compression is successful, False otherwise.
+    """
+
     dirname = os.path.dirname(file_name)
     r = safe_command.run(subprocess.run, 'cd {}/{}/build/nsis; tar cjvf /tmp/output.tar.bz2 .'.format(REPO_PATH, dirname), shell=False)
 
@@ -75,6 +143,18 @@ def compress(file_name):
 
 
 def parse_argument():
+    """Parse the environment variable 'CO_DATA' and extract key-value pairs
+    based on specific validation criteria.
+
+    It retrieves the 'CO_DATA' environment variable and parses it to extract
+    key-value pairs. The function validates each pair based on a predefined
+    list of valid keys. If a key is not recognized, a message is printed to
+    notify about the unknown parameter.
+
+    Returns:
+        dict: A dictionary containing the extracted key-value pairs from 'CO_DATA'.
+    """
+
     data = os.environ.get('CO_DATA', None)
     if not data:
         return {}
@@ -100,6 +180,13 @@ def parse_argument():
 
 
 def main():
+    """Main function to perform a series of tasks based on input arguments.
+
+    This function takes input arguments, checks for their presence, performs
+    various tasks based on the arguments, and prints the result of the
+    operation.
+    """
+
     argv = parse_argument()
     git_url = argv.get('git-url')
     if not git_url:
