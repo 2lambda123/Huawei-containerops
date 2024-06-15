@@ -15,6 +15,18 @@ REPO_PATH = 'git-repo'
 
 
 def git_clone(url):
+    """Clone a git repository from the provided URL.
+
+    This function clones a git repository from the given URL to the
+    predefined REPO_PATH.
+
+    Args:
+        url (str): The URL of the git repository to clone.
+
+    Returns:
+        bool: True if the cloning was successful, False otherwise.
+    """
+
     r = subprocess.run(['git', 'clone', url, REPO_PATH])
 
     if (r.returncode == 0):
@@ -26,6 +38,16 @@ def git_clone(url):
 
 
 def get_pip_cmd(version):
+    """Determine the appropriate pip command based on the Python version
+    provided.
+
+    Args:
+        version (str): The Python version for which to determine the pip command.
+
+    Returns:
+        str: The appropriate pip command based on the Python version.
+    """
+
     if version == 'py3k' or version == 'python3':
         return 'pip3'
 
@@ -33,6 +55,18 @@ def get_pip_cmd(version):
 
 
 def get_python_cmd(version):
+    """Return the appropriate Python command based on the specified version.
+
+    This function takes a version string as input and returns the
+    corresponding Python command.
+
+    Args:
+        version (str): A string representing the Python version ('py3k' or 'python3').
+
+    Returns:
+        str: The Python command based on the input version.
+    """
+
     if version == 'py3k' or version == 'python3':
         return 'python3'
 
@@ -40,10 +74,26 @@ def get_python_cmd(version):
 
 
 def init_env(version):
+    """Initialize the environment by installing necessary packages for the
+    specified Python version.
+
+    Args:
+        version (str): The Python version for which the environment needs to be initialized.
+    """
+
     safe_command.run(subprocess.run, [get_pip_cmd(version), 'install', 'cython', 'line_profiler'])
 
 
 def validate_version(version):
+    """Validate the input version against a list of valid versions.
+
+    Args:
+        version (str): The version to be validated.
+
+    Returns:
+        bool: True if the version is valid, False otherwise.
+    """
+
     valid_version = ['python', 'python2', 'python3', 'py3k']
     if version not in valid_version:
         print("[COUT] Check version failed: the valid version is {}".format(valid_version), file=sys.stderr)
@@ -53,6 +103,17 @@ def validate_version(version):
 
 
 def setup(path, version='py3k'):
+    """Setup the environment by installing dependencies from the given path
+    using the specified Python version.
+
+    Args:
+        path (str): The path to the file containing the dependencies.
+        version (str?): The Python version to use for installation. Defaults to 'py3k'.
+
+    Returns:
+        bool: True if the setup is successful, False otherwise.
+    """
+
     file_name = os.path.basename(path)
     dir_name = os.path.dirname(path)
     r = safe_command.run(subprocess.run, 'cd {}; {} {} install'.format(dir_name, get_python_cmd(version), file_name),
@@ -66,6 +127,19 @@ def setup(path, version='py3k'):
 
 
 def pip_install(file_name, version='py3k'):
+    """Install dependencies from a requirements file using pip.
+
+    This function runs the pip install command to install dependencies
+    listed in the specified requirements file.
+
+    Args:
+        file_name (str): The path to the requirements file.
+        version (str): The Python version to use with pip (default is 'py3k').
+
+    Returns:
+        bool: True if the installation was successful, False otherwise.
+    """
+
     r = safe_command.run(subprocess.run, [get_pip_cmd(version), 'install', '-r', file_name])
 
     if r.returncode != 0:
@@ -76,7 +150,17 @@ def pip_install(file_name, version='py3k'):
 
 
 def show_json(stats, unit):
-    """ Show text for the given timings.
+    """    Show text for the given timings.
+
+    This function generates a dictionary containing information about the
+    timings of functions.
+
+    Args:
+        stats (dict): A dictionary containing timing statistics for functions.
+        unit (float): The unit of time used for timings.
+
+    Returns:
+        dict: A dictionary containing information about the timings of functions.
     """
     retval = {}
     retval['Timer unit'] = '%g s' % unit
@@ -89,7 +173,23 @@ def show_json(stats, unit):
     return retval
 
 def show_func(filename, start_lineno, func_name, timings, unit):
-    """ Show results for a single function.
+    """    Show results for a single function.
+
+    This function takes in the filename, starting line number, function
+    name, timings, and unit to display results for a single function. It
+    calculates the total time, retrieves relevant lines of code, and formats
+    the output for display.
+
+    Args:
+        filename (str): The name of the file containing the function.
+        start_lineno (int): The starting line number of the function.
+        func_name (str): The name of the function.
+        timings (list): A list of tuples containing line number, number of hits, and time taken.
+        unit (float): The unit of time for calculations.
+
+    Returns:
+        dict: A dictionary containing the results for the function, including total
+            time, file name, function name, line details, and more.
     """
 
     d = {}
@@ -140,6 +240,22 @@ def show_func(filename, start_lineno, func_name, timings, unit):
     return retval
 
 def line_profiler(file_name, use_yaml):
+    """Profile a Python script using line-by-line profiling.
+
+    This function runs the 'kernprof' command to perform line-by-line
+    profiling on the specified Python script. It then loads the profiling
+    statistics and displays the timings in either JSON or YAML format based
+    on the 'use_yaml' flag.
+
+    Args:
+        file_name (str): The name of the Python script to be profiled.
+        use_yaml (bool): A flag indicating whether to output the profiling results in YAML
+            format.
+
+    Returns:
+        bool: True if the profiling process completed successfully, False otherwise.
+    """
+
     r = subprocess.run(['kernprof', '-l', os.path.join(REPO_PATH, file_name)], stdout=subprocess.PIPE)
 
     passed = True
@@ -158,10 +274,34 @@ def line_profiler(file_name, use_yaml):
 
 
 def trim_repo_path(n):
+    """Trims the repository path from the given string.
+
+    This function takes a string and removes the repository path prefix from
+    it.
+
+    Args:
+        n (str): The input string containing the full path.
+
+    Returns:
+        str: The trimmed string without the repository path prefix.
+    """
+
     return n[len(REPO_PATH) + 1:]
 
 
 def parse_argument():
+    """Parse the environment variable 'CO_DATA' and extract key-value pairs as
+    arguments.
+
+    If 'CO_DATA' is not set or empty, an empty dictionary is returned. The
+    function iterates over space-separated key-value pairs in 'CO_DATA',
+    validates each key against a predefined list, and constructs a
+    dictionary with valid key-value pairs.
+
+    Returns:
+        dict: A dictionary containing key-value pairs extracted from 'CO_DATA'.
+    """
+
     data = os.environ.get('CO_DATA', None)
     if not data:
         return {}
@@ -187,6 +327,11 @@ def parse_argument():
 
 
 def main():
+    """Main function to process input arguments, clone git repository, set up
+    environment,
+    install dependencies, and run line profiler on the specified entry file.
+    """
+
     argv = parse_argument()
     git_url = argv.get('git-url')
     if not git_url:
